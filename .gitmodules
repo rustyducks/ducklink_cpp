@@ -1,0 +1,6 @@
+[submodule "deps/protoduck"]
+	path = deps/protoduck
+	url = https://github.com/rustyducks/protoduck.git
+[submodule "deps/serialib"]
+	path = deps/serialib
+	url = https://github.com/imabot2/serialib.git
