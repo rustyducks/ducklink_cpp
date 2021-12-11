@@ -1,5 +1,10 @@
 include(FindProtobuf)
-find_package(Protobuf REQUIRED)
+find_package(Protobuf)
+if (NOT ${Protobuf_FOUND})
+   message("Protobuf package not found, trying without package")
+   set(Protobuf_INCLUDE_DIRS ${CMAKE_INSTALL_PREFIX}/include)
+   set(Protobuf_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/libprotobuf.a)
+endif()
 file(TO_NATIVE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/protoduck PROTOMODEL_PATH)
 file(TO_NATIVE_PATH ${CMAKE_SOURCE_DIR}/include/generated PROTOBINDING_PATH)
 file(MAKE_DIRECTORY ${PROTOBINDING_PATH})
@@ -19,6 +24,7 @@ aux_source_directory(${PROTOBINDING_PATH} Protoduck_SRC_FILES)
 add_library(Protoduck STATIC ${Protoduck_SRC_FILES})
 target_include_directories(Protoduck PUBLIC ${Protobuf_INCLUDE_DIRS})
 target_link_libraries(Protoduck ${Protobuf_LIBRARIES})
+message("Protobuf: ${Protobuf_LIBRARIES}   ${Protobuf_INCLUDE_DIRS}  ${CMAKE_INSTALL_PREFIX}")
 install(TARGETS Protoduck
         EXPORT ProtoduckTargets
         LIBRARY DESTINATION lib

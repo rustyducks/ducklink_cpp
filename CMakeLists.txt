@@ -10,6 +10,9 @@ if(CROSSCOMPILE_ARM)
         set (LINUX_ARM_TOOLCHAIN_PATH /usr/lib/ccache)
     endif()
     set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm_build.cmake)
+    add_compile_options(-Wall -Wextra -pedantic)
+else()
+    add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
 project(Ducklink VERSION 0.1.0)
@@ -18,7 +21,6 @@ set (CMAKE_CXX_STANDARD 14)
 include(GNUInstallDirs)
 add_subdirectory(deps)
 
-add_compile_options(-Wall -Wextra -pedantic -Werror)
 add_library(Ducklink STATIC src/SerialDucklink.cpp src/UDPDucklink.cpp ${Serialib_SRC_FILES})
 target_include_directories(Ducklink PRIVATE ${Serialib_INCLUDE_DIR})
 target_include_directories(Ducklink PUBLIC
