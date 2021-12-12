@@ -1,6 +1,6 @@
 #ifndef DUCKLINKRECEIVER_H
 #define DUCKLINKRECEIVER_H
-#include "generated/messages.pb.h"
+#include "messages.pb.h"
 
 namespace rd {
 class DucklinkBuffer {

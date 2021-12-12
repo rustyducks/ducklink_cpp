@@ -10,9 +10,6 @@ if(CROSSCOMPILE_ARM)
         set (LINUX_ARM_TOOLCHAIN_PATH /usr/lib/ccache)
     endif()
     set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm_build.cmake)
-    add_compile_options(-Wall -Wextra -pedantic)
-else()
-    add_compile_options(-Wall -Wextra -pedantic -Werror)
 endif()
 
 project(Ducklink VERSION 0.1.0)
@@ -25,10 +22,17 @@ add_library(Ducklink STATIC src/SerialDucklink.cpp src/UDPDucklink.cpp ${Seriali
 target_include_directories(Ducklink PRIVATE ${Serialib_INCLUDE_DIR})
 target_include_directories(Ducklink PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>  
-        $<INSTALL_INTERFACE:include>
-  # <prefix>/include/mylib)
-)
+        $<INSTALL_INTERFACE:include>)
+target_include_directories(Ducklink PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/generated>  
+        $<INSTALL_INTERFACE:include>)
+target_link_libraries(Ducklink PUBLIC Protoduck)
 set_target_properties(Ducklink PROPERTIES PUBLIC_HEADER "include/Ducklink/DucklinkBase.h;include/Ducklink/SerialDucklink.h;include/Ducklink/UDPDucklink.h;include/Ducklink/DucklinkBuffer.h")
+if (CROSSCOMPILE_ARM)
+    set_target_properties(Ducklink PROPERTIES COMPILE_FLAGS "-Wall -Wextra -pedantic")
+else()
+    set_target_properties(Ducklink PROPERTIES COMPILE_FLAGS "-Wall -Wextra -pedantic -Werror")
+endif()
 ### Install
 install(TARGETS Ducklink
         EXPORT DucklinkTargets

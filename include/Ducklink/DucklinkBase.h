@@ -1,7 +1,7 @@
 #ifndef DUCKLINKBASE_H
 #define DUCKLINKBASE_H
 
-#include "generated/messages.pb.h"
+#include "messages.pb.h"
 
 namespace rd {
 class DucklinkReceiverInterface {

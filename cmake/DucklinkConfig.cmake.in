@@ -1,6 +1,6 @@
 include(CMakeFindDependencyMacro)
 
-#find_dependency(Seriallib)
+find_dependency(Protoduck)
 
 # Add the targets file
 include("${CMAKE_CURRENT_LIST_DIR}/DucklinkTargets.cmake")
