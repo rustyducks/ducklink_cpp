@@ -4,6 +4,7 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <arpa/inet.h>
 
 #include "Ducklink/DucklinkBase.h"
 #include "Ducklink/DucklinkBuffer.h"
@@ -23,22 +24,24 @@ class UDPDucklinkBase {
     int fSocket_;
     int fPort_;
     std::string fAddr_;
-    struct addrinfo *fAddrinfo_;
+    struct sockaddr_in servaddr;
 };
 
-class UDPDucklinkSender : public UDPDucklinkBase, public DucklinkSenderInterface {
+class UDPDucklinkClient : public UDPDucklinkBase, public DucklinkSenderInterface, public DucklinkReceiverInterface {
    public:
-    UDPDucklinkSender(const std::string &addr, const int port);
+    UDPDucklinkClient(const std::string &addr, const int port);
     virtual int sendMessage(const protoduck::Message &message) override;
+    virtual int getMessages(std::vector<protoduck::Message> &messagesOut) override;
 
    protected:
     template <typename T>
     int send(const T *msg, size_t size);
+    DucklinkBuffer ducklinkBuffer_;
 };
 
-class UDPDucklinkReceiver : public UDPDucklinkBase, public DucklinkReceiverInterface {
+class UDPDucklinkServer: public UDPDucklinkBase, public DucklinkReceiverInterface {
    public:
-    UDPDucklinkReceiver(const std::string &addr, const int port);
+    UDPDucklinkServer(const std::string &addr, const int port);
     virtual int getMessages(std::vector<protoduck::Message> &messagesOut) override;
 
    protected:
